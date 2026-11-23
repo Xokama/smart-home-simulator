@@ -1,0 +1,34 @@
+classDiagram
+    direction LR
+    class CommandExecutor {
+        +run(command)
+    }
+    class ToggleLightCommand {
+        +execute()
+    }
+    class SetTargetCommand {
+        +execute()
+    }
+    class Light
+    class Camera
+    class TemperatureSensor
+    class ClimateUnit {
+        +update(event)
+    }
+    class Events {
+        +subscribe(observer)
+        +publish(event)
+    }
+    class Journal {
+        +update(event)
+    }
+
+    CommandExecutor ..> ToggleLightCommand : запускает
+    CommandExecutor ..> SetTargetCommand : запускает
+    ToggleLightCommand --> Light : переключает
+    SetTargetCommand --> ClimateUnit : задаёт цель
+    Light ..> Events : публикует
+    Camera ..> Events : публикует
+    TemperatureSensor ..> Events : публикует
+    Events --> ClimateUnit : уведомляет
+    Events --> Journal : уведомляет

@@ -1,0 +1,21 @@
+sequenceDiagram
+    actor User as Пользователь
+    participant Executor as Исполнитель команд
+    participant Light as Свет 1
+    participant Sensor as Датчик
+    participant Events as Издатель событий
+    participant Unit as Климат
+    participant Log as Журнал
+
+    Note over User,Log: Ручное управление
+    User->>Executor: Команда переключить свет
+    Executor->>Light: Переключить свет
+    Light->>Events: Свет включён
+    Events->>Log: Запись «Вручную»
+
+    Note over Sensor,Log: Случайное падение температуры
+    Sensor->>Events: Температура упала с 21 до 18 °C
+    Events->>Log: Запись показания
+    Events->>Unit: Температура изменилась
+    Unit->>Events: Начат нагрев
+    Events->>Log: Запись «Автоматически»
