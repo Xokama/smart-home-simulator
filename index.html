@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Умный дом</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <h1>Умный дом</h1>
+  <nav aria-label="Разделы">
+    <button id="show-control" aria-pressed="true">Управление</button>
+    <button id="show-journal" aria-pressed="false">Журнал</button>
+  </nav>
+  <main>
+    <section id="control">
+      <h2>Управление</h2>
+      <label><input id="random" type="checkbox" checked> Случайные события</label>
+      <h3>Свет</h3>
+      <button id="light-1" aria-pressed="false">Свет 1: выключен</button>
+      <button id="light-2" aria-pressed="false">Свет 2: выключен</button>
+      <h3>Камера</h3>
+      <p id="camera">Человек не обнаружен</p>
+      <h3>Климат</h3>
+      <p id="climate">Датчик: 21 °C. Климат: ожидание.</p>
+      <form id="target-form">
+        <label>Желаемая температура, °C <input id="target" type="number" min="16" max="28" value="21" required></label>
+        <button>Установить</button>
+      </form>
+    </section>
+    <section id="journal" hidden>
+      <h2>Журнал</h2>
+      <p id="empty">Событий пока нет</p>
+      <ul id="entries"></ul>
+    </section>
+  </main>
+</body>
+</html>

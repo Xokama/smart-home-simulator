@@ -1,0 +1,13 @@
+body {
+  max-width: 48rem;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  font: 1rem/1.5 system-ui, sans-serif;
+  color: #20262c;
+}
+nav { padding-bottom: .75rem; border-bottom: 1px solid #ccc; }
+button, input { font: inherit; }
+button { padding: .3rem .6rem; cursor: pointer; }
+button[aria-pressed="true"] { background: #234d70; color: white; }
+input[type="number"] { width: 4rem; }
+li { margin-bottom: .35rem; }
