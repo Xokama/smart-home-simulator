@@ -65,6 +65,19 @@ class ClimateUnit {
   target = 21;
   mode = 'Ожидание';
 
+  constructor(sensor) {
+    this.sensor = sensor;
+  }
+
+  update(event) {
+    if (event.type !== 'temperature' && event.type !== 'target') return;
+    const difference = this.target - this.sensor.value;
+    const next = difference > 0 ? 'Нагрев' : difference < 0 ? 'Охлаждение' : 'Ожидание';
+    if (next === this.mode) return;
+    this.mode = next;
+    events.publish({ name: 'Климат', text: next, source: AUTO });
+  }
+
   setTarget(value) {
     if (value === this.target) return;
     this.target = value;
@@ -126,10 +139,11 @@ class Journal {
 const lights = [new Light('Свет 1'), new Light('Свет 2')];
 const camera = new Camera();
 const sensor = new TemperatureSensor();
-const unit = new ClimateUnit();
+const unit = new ClimateUnit(sensor);
 const executor = new CommandExecutor();
 
 events.subscribe(new Journal());
+events.subscribe(unit);
 
 lights.forEach((light, index) => {
   const button = byId('light-' + (index + 1));
@@ -156,3 +170,26 @@ function render() {
   byId('camera').textContent = camera.person ? 'Человек обнаружен' : 'Человек не обнаружен';
   byId('climate').textContent = 'Датчик: ' + sensor.value + ' °C. Цель: ' + unit.target + ' °C. Климат: ' + unit.mode;
 }
+
+function randomEvent() {
+  if (!byId('random').checked) return;
+  const choice = Math.floor(Math.random() * 4);
+  if (choice < lights.length) {
+    executor.run(new ToggleLightCommand(lights[choice], AUTO));
+  } else if (choice === 2) {
+    camera.togglePresence();
+  } else {
+    const delta = Math.random() < 0.5 ? -3 : 3;
+    sensor.measure(Math.max(10, Math.min(34, sensor.value + delta)));
+  }
+  render();
+}
+
+setInterval(randomEvent, 8000);
+setInterval(() => {
+  if (sensor.value === unit.target) return;
+  sensor.measure(sensor.value + Math.sign(unit.target - sensor.value));
+  render();
+}, 3000);
+
+render();
